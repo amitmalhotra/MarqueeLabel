@@ -104,6 +104,17 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     }
 }
 
+#pragma mark - Workaround for bug in which the entire label is cut off prematurely, instead of extending the entire bounds of the label
+
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    [self updateSublabelAndLocationsAndBeginScroll:!self.orientationWillChange];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+    [self updateSublabelAndLocationsAndBeginScroll:!self.orientationWillChange];
+
 #pragma mark - Initialization and Label Config
 
 - (id)initWithFrame:(CGRect)frame {
