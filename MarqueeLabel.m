@@ -114,6 +114,7 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
 - (void)setBounds:(CGRect)bounds {
     [super setBounds:bounds];
     [self updateSublabelAndLocationsAndBeginScroll:!self.orientationWillChange];
+}
 
 #pragma mark - Initialization and Label Config
 
