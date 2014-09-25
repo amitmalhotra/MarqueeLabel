@@ -104,6 +104,18 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     }
 }
 
+#pragma mark - Workaround for bug in which the entire label is cut off prematurely, instead of extending the entire bounds of the label
+
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    [self updateSublabelAndLocationsAndBeginScroll:!self.orientationWillChange];
+}
+
+- (void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+    [self updateSublabelAndLocationsAndBeginScroll:!self.orientationWillChange];
+}
+
 #pragma mark - Initialization and Label Config
 
 - (id)initWithFrame:(CGRect)frame {
@@ -194,7 +206,7 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     _tapToScroll = NO;
     _isPaused = NO;
     _fadeLength = 0.0f;
-    _animationDelay = 1.0;
+    _animationDelay = 0.0;
     _animationDuration = 0.0f;
     _continuousMarqueeExtraBuffer = 0.0f;
     
@@ -573,8 +585,8 @@ CGPoint MLOffsetCGPoint(CGPoint point, CGFloat offset);
     [CATransaction begin];
     
     // Set Duration
-    [CATransaction setAnimationDuration:(2.0 * (delayAmount + interval))];
-
+    [CATransaction setAnimationDuration:interval];
+    
     // Create animation for gradient, if needed
     if (self.fadeLength != 0.0f) {
         CAKeyframeAnimation *gradAnim = [self keyFrameAnimationForGradientFadeLength:self.fadeLength
